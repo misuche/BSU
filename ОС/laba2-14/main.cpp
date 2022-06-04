@@ -53,6 +53,7 @@ int main() {
     std::vector<int> v(n);
     std::cout<<"enter array elements\n";
     for(int i=0;i<n;i++)std::cin>>v[i];
+    //for(int i:v)std::cin>>i;
     printArray(v);
     result res;
     createMinMax(v,res);
