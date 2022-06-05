@@ -1,11 +1,12 @@
 #include <iostream>
 #include "windows.h"
-#include "errors.h"
 
 struct parameter {
     parameter() : id(-1), arr(NULL), n(-1), termStatus(NULL) {}
+
     parameter(int threadId, int *arr, int n, HANDLE *termStatus) : id(threadId), arr(arr), n(n),
                                                                    termStatus(termStatus) {}
+
     int id;
     int *arr;
     int n;
@@ -30,8 +31,7 @@ DWORD WINAPI marker(void *args) {
 
     WaitForSingleObject(hStart, INFINITE);
 
-    while (true)
-    {
+    while (true) {
         num = rand() % n;
         EnterCriticalSection(&cs);
         if (arr[num] == 0) {
@@ -60,15 +60,18 @@ DWORD WINAPI marker(void *args) {
 
     return 0;
 }
+
 int main() {
 
     int currentCount;
     int *arr;
     bool *isTerminated;
-    std::cout << "Enter size of array : ";
-    int arrSize;std::cin >> arrSize;
-    std::cout << "Enter number of threads to create : ";
-    int threadCount;std::cin >> threadCount;
+    std::cout << "enter array size: ";
+    int arrSize;
+    std::cin >> arrSize;
+    std::cout << "enter thread count: ";
+    int threadCount;
+    std::cin >> threadCount;
 
     arr = new int[arrSize];
 
@@ -77,15 +80,14 @@ int main() {
     isTerminated = new bool[threadCount];
 
     for (int i = 0; i < arrSize; ++i) arr[i] = 0;
-    for (int i = 0; i < threadCount; ++i) isTerminated[i] = false;
+    for (int i = 0; i < threadCount; ++i)isTerminated[i] = false;
 
-    if (!hThreads) {
-        GetLastError();
-    }
+    if (!hThreads)GetLastError();
 
     hStart = CreateEvent(NULL, TRUE, FALSE, NULL);
     hStopped = new HANDLE[threadCount];
     for (int i = 0; i < threadCount; i++) {
+
         params[i] = parameter(i + 1, arr, arrSize, new HANDLE[2]);
         params[i].termStatus[0] = CreateEvent(NULL, FALSE, FALSE, NULL);
         params[i].termStatus[1] = CreateEvent(NULL, FALSE, FALSE, NULL);
@@ -140,7 +142,7 @@ int main() {
 
     DeleteCriticalSection(&cs);
     CloseHandle(hStart);
-    for (int i = 0; i < threadCount; i++){
+    for (int i = 0; i < threadCount; i++) {
         CloseHandle(hThreads[i]);
         CloseHandle(hStopped[i]);
     }
