@@ -18,7 +18,7 @@ void startCreator(std::string &binFileName, int amount) {
     ss << amount;
     std::string arguments = binFileName + ' ' + ss.str();
 
-    bool flag = CreateProcess("Creator.exe", (char *) arguments.c_str(), NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL,
+    bool flag = CreateProcess("Creator.exe", &arguments[0], NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL,
                               NULL, &si, &pi);
     if (!flag)
         GetLastError();
@@ -38,7 +38,7 @@ void startReporter(std::string &binFileName, std::string &reportFileName, double
     std::stringstream ss;
     ss << salary;
     std::string arguments = binFileName + " " + reportFileName + " " + ss.str();
-    bool flag = CreateProcess("Reporter.exe", (char *) arguments.c_str(), NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL,
+    bool flag = CreateProcess("Reporter.exe", &arguments[0], NULL, NULL, FALSE, CREATE_NEW_CONSOLE, NULL,
                               NULL, &si,
                               &pi);
     if (!flag) GetLastError();
@@ -58,7 +58,7 @@ int main() {
 
     startCreator(binFileName, amount);
 
-    std::ifstream in(binFileName.c_str(), std::ios::binary);
+    std::ifstream in(&binFileName[0], std::ios::binary);
     employee e;
     while (in.read((char *) &e, sizeof(employee))) {
         std::cout << e.num << " " << e.name << " " << e.hours << std::endl;
@@ -74,7 +74,7 @@ int main() {
     std::cin >> salary;
     startReporter(binFileName, reportFileName, salary);
     std::string line;
-    in.open(reportFileName.c_str());
+    in.open(&reportFileName[0]);
     while (std::getline(in, line))
         std::cout << line << std::endl;
     system("pause");
