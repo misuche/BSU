@@ -1,17 +1,17 @@
 #include <iostream>
 #include <vector>
 #include <Windows.h>
-using namespace std;
+
 struct array {
-    explicit array(const vector<int>& arr) : v(arr) {};
-    vector<int> v;
+    explicit array(const std::vector<int>& arr) : v(arr) {};
+    std::vector<int> v;
     int min = 0;
     int max = 0;
     int average = 0;
 
 };
 
-DWORD WINAPI findMinMax(LPVOID arguments) {
+DWORD WINAPI findMinMax(void* arguments) {
     array* arr = (array*)arguments;
     double min = INT_MAX;
     double max = INT_MIN;
@@ -27,7 +27,7 @@ DWORD WINAPI findMinMax(LPVOID arguments) {
     arr->max=max; arr->min=min;
     return 0;
 }
-DWORD WINAPI average(LPVOID arguments) {
+DWORD WINAPI average(void* arguments) {
     array* arr = (array*)arguments;
 
     for (int i = 0; i < arr->v.size(); ++i) {
@@ -38,7 +38,7 @@ DWORD WINAPI average(LPVOID arguments) {
     std::cout << "average value: " << arr->average << "\n";
     return 0;
 }
-void printArray(vector<int> v) {
+void printArray(std::vector<int> v) {
     for (int i = 0; i < v.size(); ++i) {
         std::cout << v[i] << ' ';
     }
@@ -60,10 +60,10 @@ void createAverage(array *arr)
 }
 int main() {
     std::cout<<"enter array size\n";
-    int n; cin>>n;
+    int n; std::cin>>n;
     std::cout<<"enter array elements\n";
-    vector<int> v(n);
-    for(int i=0;i<n;i++)cin>>v[i];
+    std::vector<int> v(n);
+    for(int i=0;i<n;i++)std::cin>>v[i];
 
     array* arr= new array(v);
     createMinMax(arr);
